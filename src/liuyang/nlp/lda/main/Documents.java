@@ -52,6 +52,7 @@ public class Documents {
 			}
 			//Remove stop words and noise words
 			for(int i = 0; i < words.size(); i++){
+				System.out.println(words.get(i));
 				if(Stopwords.isStopword(words.get(i)) || isNoiseWord(words.get(i))){
 					words.remove(i);
 					i--;
@@ -64,6 +65,7 @@ public class Documents {
 				if(!termToIndexMap.containsKey(word)){
 					int newIndex = termToIndexMap.size();
 					termToIndexMap.put(word, newIndex);
+					System.out.println(word);
 					indexToTermMap.add(word);
 					termCountMap.put(word, new Integer(1));
 					docWords[i] = newIndex;
@@ -84,9 +86,10 @@ public class Documents {
 			if(string.matches(".*www\\..*") || string.matches(".*\\.com.*") || 
 					string.matches(".*http:.*") )
 				return true;
-			if (!m.matches()) {
-				return true;
-			} else
+//			if (!m.matches()) {
+//				return true;
+//			} 
+			else
 				return false;
 		}
 		
