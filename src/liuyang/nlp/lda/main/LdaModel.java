@@ -33,6 +33,8 @@ public class LdaModel {
 	int saveStep;//The number of iterations between two saving
 	int beginSaveIters;//Begin save model at this iteration
 	
+	double perplexity; // my parameter
+	
 	public LdaModel(LdaGibbsSampling.modelparameters modelparam) {
 		// TODO Auto-generated constructor stub
 		alpha = modelparam.alpha;
@@ -127,6 +129,32 @@ public class LdaModel {
 				theta[m][k] = (nmk[m][k] + alpha) / (nmkSum[m] + K * alpha);
 			}
 		}
+		
+		//get perplexity begin
+		double perplexity_fenzi = 0.0;
+		double perplexity_fenmu = 0.0;
+		System.out.println("topic " + K );
+		for(int m = 0 ; m < M ; m++ ) {
+			double multiresult = 1.0;
+			for(int t = 0 ; t < V ; t ++) {
+				double addresult = 0.0;
+				for(int k = 0 ; k < K; k++) {
+					System.out.println("phi " + phi[k][t] + " theta " + theta[m][k]);
+					addresult += phi[k][t] * theta[m][k];
+				}
+				System.out.println("multiresult " + multiresult + " addresult " + addresult);
+				if(multiresult <= 0.0)
+					System.exit(0);
+				multiresult *= addresult;
+				
+			}
+			
+			perplexity_fenzi += Math.log(multiresult) / Math.log(2.0);
+			perplexity_fenmu += nmkSum[m];
+		}
+		System.out.println(perplexity_fenzi + " " + perplexity_fenmu + " " + Math.log(Math.E));
+		perplexity = - Math.pow(Math.E, perplexity_fenzi / perplexity_fenmu);
+		//get perlexity end
 	}
 
 	private int sampleTopicZ(int m, int n) {
@@ -182,6 +210,8 @@ public class LdaModel {
 		lines.add("iterations = " + iterations);
 		lines.add("saveStep = " + saveStep);
 		lines.add("beginSaveIters = " + beginSaveIters);
+		//new line :perplexity
+		lines.add("perplexity = " + perplexity);
 		FileUtil.writeLines(resPath + modelName + ".params", lines);
 		
 		//lda.phi K*V

@@ -52,7 +52,7 @@ public class Documents {
 			}
 			//Remove stop words and noise words
 			for(int i = 0; i < words.size(); i++){
-				System.out.println(words.get(i));
+//				System.out.println(words.get(i));
 				if(Stopwords.isStopword(words.get(i)) || isNoiseWord(words.get(i))){
 					words.remove(i);
 					i--;
