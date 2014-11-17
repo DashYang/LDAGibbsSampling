@@ -23,6 +23,8 @@ public class LdaGibbsSampling {
 		int iteration = 100;
 		int saveStep = 10;
 		int beginSaveIters = 50;
+		int group = 10;
+		double lamda = 0.1;
 	}
 	
 	/**Get parameters from configuring file. If the 
@@ -39,6 +41,7 @@ public class LdaGibbsSampling {
 		FileUtil.readLines(parameterFile, paramLines);
 		for(String line : paramLines){
 			String[] lineParts = line.split("\t");
+			System.out.println(lineParts[0]);
 			switch(parameters.valueOf(lineParts[0])){
 			case alpha:
 				ldaparameters.alpha = Float.valueOf(lineParts[1]);
@@ -58,12 +61,18 @@ public class LdaGibbsSampling {
 			case beginSaveIters:
 				ldaparameters.beginSaveIters = Integer.valueOf(lineParts[1]);
 				break;
+			case group:
+				ldaparameters.group = Integer.valueOf(lineParts[1]);
+				break;
+			case lamda:
+				ldaparameters.lamda = Float.valueOf(lineParts[1]);
+				break;
 			}
 		}
 	}
 	
 	public enum parameters{
-		alpha, beta, topicNum, iteration, saveStep, beginSaveIters;
+		alpha, beta, topicNum, iteration, saveStep, beginSaveIters, group ,lamda;
 	}
 	
 	/**
