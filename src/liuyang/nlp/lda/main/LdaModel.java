@@ -95,7 +95,7 @@ public class LdaModel {
 			g[m] = new int[N];
 			for (int n = 0; n < N; n++) {
 				int initTopic = (int) (Math.random() * K);// From 0 to K - 1
-				int initGroup = (int) (Math.random() * GROUP);// From 0 to K - 1
+				int initGroup = (int) (Math.random() * GROUP);// From 0 to GROUP - 1
 				z[m][n] = initTopic;
 				g[m][n] = initGroup;
 
@@ -179,7 +179,6 @@ public class LdaModel {
 	//	 get perplexity begin
 		 double perplexity_fenzi = 0.0;
 		 double perplexity_fenmu = 0.0;
-		 System.out.println("topic " + K );
 		 for(int m = 0 ; m < M ; m++ ) {
 			 double multiresult = 1.0;
 			 for(int t = 0 ; t < V ; t ++) {
@@ -188,12 +187,12 @@ public class LdaModel {
 					 addresult += phi[k][t] * theta[m][k];
 				 }
 				 perplexity_fenzi += - Math.log(addresult) / Math.log(2.0);
-				 System.out.println(perplexity_fenzi);
 				 if(multiresult <= 0.0)
 					 System.exit(0);
 			 }		
 			 perplexity_fenmu += nmkSum[m];
 		 }
+		 System.out.println(perplexity_fenzi  + " " + perplexity_fenmu + "¡¡" + perplexity_fenzi / perplexity_fenmu);
 		 perplexity =  Math.pow(Math.E, perplexity_fenzi / perplexity_fenmu);
 		 //get perlexity end
 	}
@@ -343,10 +342,10 @@ public class LdaModel {
 
 		// lda.ncm GROUP*M
 		writer = new BufferedWriter(new FileWriter(resPath
-				+ modelName + ".gamma"));
-		for (int i = 0; i < GROUP; i++) {
-			for (int j = 0; j < M; j++) {
-				writer.write(gamma[i][j] + "\t");
+				+ modelName + ".group"));
+		for (int i = 0; i < M; i++) {
+			for (int j = 0; j < g[i].length; j++) {
+				writer.write(g[i][j] + ",");
 			}
 			writer.write("\n");
 		}
