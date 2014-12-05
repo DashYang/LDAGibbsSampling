@@ -176,25 +176,44 @@ public class LdaModel {
 				}
 			}
 		}
-	//	 get perplexity begin
-		 double perplexity_fenzi = 0.0;
-		 double perplexity_fenmu = 0.0;
-		 for(int m = 0 ; m < M ; m++ ) {
-			 double multiresult = 1.0;
-			 for(int t = 0 ; t < V ; t ++) {
-				 double addresult = 0.0;
-				 for(int k = 0 ; k < K; k++) {
-					 addresult += phi[k][t] * theta[m][k];
-				 }
-				 perplexity_fenzi += - Math.log(addresult) / Math.log(2.0);
-				 if(multiresult <= 0.0)
-					 System.exit(0);
-			 }		
-			 perplexity_fenmu += nmkSum[m];
-		 }
-		 System.out.println(perplexity_fenzi  + " " + perplexity_fenmu + "¡¡" + perplexity_fenzi / perplexity_fenmu);
-		 perplexity =  Math.pow(Math.E, perplexity_fenzi / perplexity_fenmu);
-		 //get perlexity end
+//	//	get perplexity begin
+//		 double perplexity_fenzi = 0.0;
+//		 double perplexity_fenmu = 0.0;
+//		 System.out.println("topic " + K );
+//		 for(int m = 0 ; m < M ; m++ ) {
+//			 double multiresult = 1.0;
+//			 for(int t = 0 ; t < V ; t ++) {
+//				 double addresult = 0.0;
+//				 for(int k = 0 ; k < K; k++) {
+//					 addresult += phi[k][t] * theta[m][k];
+//				 }
+//				 perplexity_fenzi += - Math.log(addresult) / Math.log(2.0);
+//				 if(multiresult <= 0.0)
+//					 System.exit(0);
+//			 }		
+//			 perplexity_fenmu += nmkSum[m];
+//		 }
+//		 perplexity =  Math.pow(Math.E, perplexity_fenzi / perplexity_fenmu);
+//			//	get perplexity end		
+		
+//		get perplexity begin
+		double perplexity_power = 0.0;
+		perplexity = 0.0;
+		for(int m = 0 ; m < M ; m++ ) {
+			int Nm = doc[m].length;
+			perplexity_power = 0.0;
+			for(int t = 0 ; t < Nm ; t ++) {
+				double addresult = 0.0;
+				for(int k = 0 ; k < K; k++) {
+					addresult += phi[k][t] * theta[m][k];
+				}
+				perplexity_power += - Math.log(addresult) / Math.log(2.0) / Nm;
+			}		
+			perplexity +=  Math.pow(2 , perplexity_power);
+		}
+//		
+			 //get perlexity end
+		 
 	}
 
 	private int sampleTopicZ(int m, int n) {
